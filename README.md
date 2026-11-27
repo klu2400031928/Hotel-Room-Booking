@@ -1,2 +1,3 @@
 Hotel Room Booking Application
-Status: Room Search Feature
+
+Status: Room Search and Room Booking Features
