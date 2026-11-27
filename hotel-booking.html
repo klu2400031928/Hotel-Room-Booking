@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotel Booking</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --border: #d1d5db;
+      --success-bg: #ecfdf5;
+      --success-border: #a7f3d0;
+      --success-text: #065f46;
+      --error-text: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      padding: 2rem;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 1rem;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 560px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: #fff;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .addons {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    .summary-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1.25rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .summary-box .details {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .summary-box .total {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .error {
+      color: var(--error-text);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: none;
+    }
+
+    button[type="submit"],
+    .secondary-btn {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    button[type="submit"] {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    button[type="submit"]:hover {
+      background: var(--primary-hover);
+    }
+
+    .confirmation {
+      display: none;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .confirmation h2 {
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .confirmation p {
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .secondary-btn {
+      margin-top: 1rem;
+      background: #e5e7eb;
+      color: var(--text);
+    }
+
+    .secondary-btn:hover {
+      background: #d1d5db;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Grand Horizon Hotel — Room Booking</h1>
+      <p>Reserve your stay with instant rate calculation.</p>
+    </header>
+
+    <form id="bookingForm" novalidate>
+      <div class="grid">
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Alex Morgan" required />
+        </div>
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="alex@example.com" required />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="checkIn">Check-in Date</label>
+          <input type="date" id="checkIn" name="checkIn" required />
+        </div>
+        <div class="field">
+          <label for="checkOut">Check-out Date</label>
+          <input type="date" id="checkOut" name="checkOut" required />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="roomType">Room Type</label>
+          <select id="roomType" name="roomType">
+            <option value="120">Standard Room ($120 / night)</option>
+            <option value="180">Deluxe Room ($180 / night)</option>
+            <option value="280">Executive Suite ($280 / night)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="guests">Guests</label>
+          <input type="number" id="guests" name="guests" min="1" max="6" value="2" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Optional Add-ons</label>
+        <div class="addons">
+          <label class="checkbox-label">
+            <input type="checkbox" id="breakfast" value="20" />
+            Daily Breakfast (+$20 / night)
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="airportPickup" value="45" />
+            Airport Pickup (+$45 flat)
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="requests">Special Requests</label>
+        <textarea id="requests" name="requests" rows="2" placeholder="Late check-in, high floor, etc."></textarea>
+      </div>
+
+      <div class="summary-box">
+        <div class="details" id="staySummary">Select dates to calculate total</div>
+        <div class="total" id="totalPrice">$0</div>
+      </div>
+
+      <div class="error" id="errorMsg"></div>
+      <button type="submit">Confirm Reservation</button>
+    </form>
+
+    <section class="confirmation" id="confirmationBox">
+      <h2>Booking Confirmed!</h2>
+      <div id="confirmationDetails"></div>
+      <button type="button" class="secondary-btn" id="resetBtn">Make Another Booking</button>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("bookingForm");
+    const checkInInput = document.getElementById("checkIn");
+    const checkOutInput = document.getElementById("checkOut");
+    const roomTypeSelect = document.getElementById("roomType");
+    const breakfastCheck = document.getElementById("breakfast");
+    const pickupCheck = document.getElementById("airportPickup");
+    const staySummary = document.getElementById("staySummary");
+    const totalPriceEl = document.getElementById("totalPrice");
+    const errorMsg = document.getElementById("errorMsg");
+    const confirmationBox = document.getElementById("confirmationBox");
+    const confirmationDetails = document.getElementById("confirmationDetails");
+    const resetBtn = document.getElementById("resetBtn");
+
+    // Default check-in to today and check-out to tomorrow.
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const toDateInputValue = (date) => date.toISOString().split("T")[0];
+    checkInInput.min = toDateInputValue(today);
+    checkInInput.value = toDateInputValue(today);
+    checkOutInput.min = toDateInputValue(tomorrow);
+    checkOutInput.value = toDateInputValue(tomorrow);
+
+    function getNights() {
+      if (!checkInInput.value || !checkOutInput.value) return 0;
+      const start = new Date(checkInInput.value);
+      const end = new Date(checkOutInput.value);
+      const diffMs = end - start;
+      return Math.round(diffMs / (1000 * 60 * 60 * 24));
+    }
+
+    function updateSummary() {
+      const nights = getNights();
+      const nightlyRate = Number(roomTypeSelect.value);
+      const breakfastRate = breakfastCheck.checked ? Number(breakfastCheck.value) : 0;
+      const pickupFee = pickupCheck.checked ? Number(pickupCheck.value) : 0;
+
+      if (nights <= 0) {
+        staySummary.textContent = "Check-out must be after check-in";
+        totalPriceEl.textContent = "$0";
+        return 0;
+      }
+
+      const total = nights * (nightlyRate + breakfastRate) + pickupFee;
+      const nightLabel = nights === 1 ? "night" : "nights";
+      staySummary.textContent = `${nights} ${nightLabel} · $${nightlyRate}/night` +
+        (breakfastRate ? ` + $${breakfastRate}/night breakfast` : "") +
+        (pickupFee ? ` + $${pickupFee} pickup` : "");
+      totalPriceEl.textContent = `$${total}`;
+      return total;
+    }
+
+    [checkInInput, checkOutInput, roomTypeSelect, breakfastCheck, pickupCheck].forEach((el) => {
+      el.addEventListener("change", updateSummary);
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      errorMsg.style.display = "none";
+
+      const fullName = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const guests = document.getElementById("guests").value;
+      const requests = document.getElementById("requests").value.trim();
+      const nights = getNights();
+      const total = updateSummary();
+
+      if (!fullName || !email) {
+        errorMsg.textContent = "Please enter your name and email address.";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      if (nights <= 0) {
+        errorMsg.textContent = "Check-out date must be at least 1 day after check-in.";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      const roomLabel = roomTypeSelect.options[roomTypeSelect.selectedIndex].text;
+      const bookingRef = "GH-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+      confirmationDetails.innerHTML = "";
+      const lines = [
+        `Reference: ${bookingRef}`,
+        `Guest: ${fullName} (${email})`,
+        `Dates: ${checkInInput.value} to ${checkOutInput.value} (${nights} ${nights === 1 ? "night" : "nights"})`,
+        `Room: ${roomLabel} · Guests: ${guests}`,
+        `Total Estimated Price: $${total}`,
+        requests ? `Requests: ${requests}` : null,
+      ].filter(Boolean);
+
+      lines.forEach((line) => {
+        const p = document.createElement("p");
+        p.textContent = line;
+        confirmationDetails.appendChild(p);
+      });
+
+      form.style.display = "none";
+      confirmationBox.style.display = "block";
+    });
+
+    resetBtn.addEventListener("click", () => {
+      form.reset();
+      checkInInput.value = toDateInputValue(today);
+      checkOutInput.value = toDateInputValue(tomorrow);
+      updateSummary();
+      confirmationBox.style.display = "none";
+      form.style.display = "block";
+    });
+
+    updateSummary();
+  </script>
+</body>
+</html>
